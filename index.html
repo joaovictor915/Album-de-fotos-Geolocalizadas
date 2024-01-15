@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Document</title>
+</head>
+<body style="font-size: 1.3rem;">
+    
+    <div class="container">
+        <nav>
+            <div class="row">
+                <div class="col-md-3">
+                    <a href="./index.html">
+                            <img src="./img/istockphoto-1399922737-612x612.jpg" style="width: 30%; background-color: grey;"></img>
+                    </a>
+                </div>
+                <div class="col-md-1 offset-md-6 .card">
+                    <a href="./index.html">
+                        <button>
+                            LINK 1
+                        </button>
+                    </a>
+                </div>
+    
+                <div class="col-md-1 .card">
+                    <a href="./index.html">
+                        <button>
+                            LINK 2
+                        </button>
+                    </a>
+                </div>
+    
+                <div class="col-md-1 .card">
+                    <a href="./index.html">
+                        <button>
+                            LINK 3
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="row">
+            <div class="col-12">
+                <h3 class="line_divisor">Destaques</h3>
+            </div>
+        </div>
+
+        <div class="m-0 w-100 d-flex justify-content-center">
+            <div id="carouselExampleControls" class="carousel slide col-8 bg-light p-3"
+            data-ride="carousel">
+
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleControls" data-slide-to="0"></li>
+                    <li data-target="#carouselExampleControls" data-slide-to="1" class="active"></li>
+                    <li data-target="#carouselExampleControls" data-slide-to="2"></li>
+                    <li data-target="#carouselExampleControls" data-slide-to="3"></li>
+                    <li data-target="#carouselExampleControls" data-slide-to="4" class=""></li>
+                    <li data-target="#carouselExampleControls" data-slide-to="5"></li>
+                    <li data-target="#carouselExampleControls" data-slide-to="6"></li>
+                    <li data-target="#carouselExampleControls" data-slide-to="7" class=""></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img class="d-block w-100" id="cover1" alt="Maracanã">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" id="cover2">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" id="cover3">
+                    </div>
+                    <div class="carousel-item ">
+                        <img class="d-block w-100" id="cover4" >
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" id="cover5" >
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" id="cover6" >
+                    </div>
+                    <div class="carousel-item ">
+                        <img class="d-block w-100" id="cover7" >
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" id="cover8" >
+                    </div>
+                </div>
+                
+                <a class="carousel-control-prev col-10" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Anterior</span>
+                </a>
+                <a class="carousel-control-next col-10" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Próximo</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h3 class="line_divisor">Mapa</h3>
+            </div>
+        </div>
+
+
+        <div class="col-12" style="height: 100%; ">
+            <div id='map' style="top: 0; bottom: 0; width: 100%; height: 100%; min-height: 400px;"></div>
+            <script>
+                async function fetchData() {
+                    const response = await fetch(`https://stadium-servers--joao-victorv801.repl.co/stadiums`);
+                    const data = await response.json();
+                    return data;
+                }
+            
+                async function fetchFilms() {
+                    try {
+                        console.log("antes do fetch");
+                        const stadiums = await fetchData();
+                        console.log(stadiums);
+            
+                        return stadiums;
+                    } catch (e) {
+                        console.log(e);
+                        return [];
+                    }
+                }
+            
+                mapboxgl.accessToken = 'pk.eyJ1IjoianZtYXJ0aW5zcHVjIiwiYSI6ImNscG9vd3F0ajBpa24yaWtoODF6MWUxNnEifQ.Mft9aoVSCrpbHTzh6dtahQ';
+            
+                async function initializeMap() {
+                    try {
+                        const stadiums = await fetchFilms();
+            
+                        const map = new mapboxgl.Map({
+                            container: 'map',
+                            style: 'mapbox://styles/mapbox/streets-v11',
+                            center: [-43.2424, -22.9121], // Coordenadas do Brasil
+                            zoom: 4
+                        });
+
+                        stadiums.forEach((stadium, index) => {
+                            const stadiumDestaque = document.getElementById(`cover${index+1}`)
+                            stadiumDestaque.src = stadium.photos[0].url;
+                        })
+                        stadiums.forEach(stadium => {
+                            // Use o serviço de geocodificação para obter coordenadas a partir do endereço
+                            fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(stadium.address)}.json?access_token=${mapboxgl.accessToken}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    const feature = data.features[0];
+            
+                                    if (feature) {
+                                        // Adiciona um marcador para cada estádio
+                                        new mapboxgl.Marker()
+                                            .setLngLat(feature.center)
+                                            .setPopup(new mapboxgl.Popup({ offset: 25 })
+                                            .setHTML(`<h3>${stadium.name}</h3><p>${stadium.address}</p><a href="./album.html?id=${stadium.id}" target="_blank">Detalhes</a>`))
+                                            .addTo(map);
+                                    }
+                                })
+                                .catch(error => console.error('Erro de geocodificação:', error));
+                        });
+
+                        const stadiumGallery = document.getElementById('stadium-gallery');
+
+                        stadiums.forEach(stadium => {
+                            const stadiumContainer = document.createElement('div');
+                            stadiumContainer.classList.add('col-3', 'mb-6', 'container', 'd-flex', 'justify-content-center', 'align-items-center', 'image-container');
+
+                            const link = document.createElement('a');
+                            link.href = `./album.html?id=${stadium.id}`;
+
+                            const imageContainer = document.createElement('div');
+                            imageContainer.classList.add('row', 'mr-1');
+
+                            const image = document.createElement('img');
+                            image.classList.add('col-12');
+                            image.src = stadium.photos[0].url;
+                            image.alt = `Estádio ${stadium.name}`;
+
+                            const imageCaption = document.createElement('div');
+                            imageCaption.classList.add('image-caption', 'col-12');
+                            const captionText = document.createElement('p');
+                            captionText.innerText = stadium.name;
+
+                            // Adiciona os elementos ao DOM
+                            stadiumGallery.appendChild(stadiumContainer);
+                            stadiumContainer.appendChild(link);
+                            link.appendChild(imageContainer);
+                            imageContainer.appendChild(image);
+                            imageContainer.appendChild(imageCaption);
+                            imageCaption.appendChild(captionText);
+                        });
+                    } catch (error) {
+                        console.error('Erro ao inicializar o mapa:', error);
+                    }
+                }
+            
+                initializeMap();
+            </script>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h3 class="line_divisor">Lista de Álbuns</h3>
+            </div>
+        </div>
+
+        <div class="row d-flex" id="stadium-gallery">
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h3 class="line_divisor">Créditos</h3>
+            </div>
+        </div>
+
+        <footer class="mt-2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h4 class="text-left">Sobre</h4>
+                        <p class="text-left">Site dedicado a álbuns de estádios de futebol do Brasil</p>
+                        <p class="text-left">Idealizado por João Victor Martins dos Anjos, contém imagens dos maiores e mais importantes estádios do Brasil
+                            e tem como objetivo exaltar a riqueza de diversidade dos estádios brasileiros.</p>
+                    </div>
+                    <div class="col-md-4 offset-md-0">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="text-left">
+                                    <h4>Autoria</h4>
+                                    <img class="w-100" src="./img/1649964662548.jpeg">
+                                </div>
+                            </div>
+
+                            <div class="col-md-15 mb-0 pb-0 mt-4 text-left" style="font-size: small;">
+                                <p class="text-sm"><b>Nome:</b> João Victor Martins dos Anjos</p>
+                                <p class="text-sm"><b>Curso:</b> Ciência da Computação</p>
+                                <p class="text-sm"><b>Turno:</b> Manhã</p>
+                            </div>
+                            <div class="social-icons col-md-10 text-left p-0">
+                                <a href="https://www.facebook.com/jvmartins.vitim/"><i class="fab fa-facebook"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="https://www.instagram.com/jv_mar.tins/"><i class="fab fa-instagram"></i></a>
+                                <!-- Adicione mais ícones e links para outras redes sociais, se necessário -->
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/c0c38a24b2.js" crossorigin="anonymous"></script>
+</body>
+</html>
